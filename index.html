@@ -1,0 +1,125 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+    <title>ShinyGaem - Game "polish" and Phaser test</title>
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var game = new Phaser.Game(960, 640, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+function preload() {
+	game.load.spritesheet('player', 'assets/player_sprite.png', 32, 48, 12, 0, 4);
+
+    game.load.tilemap('scene', 'assets/shinygaem_map..json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.image('tiles', 'assets/open_tileset.png');
+
+}
+
+var player;
+var cursors;
+var lastPosition = 7;
+
+var map;
+var layers = new Array(5);
+
+
+function create() {
+    //FUNCIONES TILESET
+    map = game.add.tilemap('scene');
+    map.addTilesetImage('open_tileset', 'tiles');
+
+    layers[0] = map.createLayer('Background');
+    layers[1] = map.createLayer('MiddleGround');
+    layers[2] = map.createLayer('Foreground');
+    layers[4] = map.createLayer('Collision');
+    //Agregando Fisicas Arcade (colisiones y cosas)
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    //Agregando el sprite del jugador
+    player = game.add.sprite(32, game.world.height - 150, 'player');
+
+    //Agregando fisicas del jugador
+    game.physics.arcade.enable(player);
+
+    //Animaciones jugador
+    player.animations.add('top', [0, 1, 2], 8, true);
+    player.animations.add('right', [3, 4, 5], 8, true);
+    player.animations.add('down', [6, 7, 8], 8, true);
+    player.animations.add('left', [9, 10, 11], 8, true);
+
+    //cursores
+    cursors = game.input.keyboard.createCursorKeys();
+
+
+    game.stage.backgroundColor = '#787878';
+    
+    //Elementos que se renderean sobre el personaje
+    layers[3] = map.createLayer('Top');
+
+}
+
+function update() {
+    //colisiones entre el jugador y la layer creada en el json
+    game.physics.arcade.collide(player, layers[5]);
+
+    //FUNCIONES JUGADOR
+    player.body.velocity.x = 0;
+    player.body.velocity.y = 0;
+
+
+    if (cursors.left.isDown)
+    {
+        //Mover a la izquierda
+        player.body.velocity.x = -150;
+
+        player.animations.play('left');
+
+        lastPosition = 10;
+    }
+    else if (cursors.right.isDown)
+    {
+        // Mover a la derecha
+        player.body.velocity.x = 150;
+
+        player.animations.play('right');
+        lastPosition = 4;
+    }
+    else if (cursors.up.isDown)
+    {
+        //Mover Arriba
+        player.body.velocity.y = -150;
+
+        player.animations.play('top');
+        lastPosition = 1;
+    }
+    else if (cursors.down.isDown)
+    {
+        //Mover Abajo
+        player.body.velocity.y = 150;
+
+        player.animations.play('down');
+        lastPosition = 7;
+    }
+    else
+    {
+        //  Stand still
+        player.animations.stop();
+
+        player.frame = lastPosition;
+    }
+
+}
+
+</script>
+
+</body>
+</html>
