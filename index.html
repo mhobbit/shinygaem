@@ -17,9 +17,9 @@
 var game = new Phaser.Game(960, 640, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 function preload() {
-	game.load.spritesheet('player', 'assets/player_sprite.png', 32, 48, 12, 0, 4);
+	game.load.spritesheet('player', 'assets/player_sprite.png', 32, 37, 12, 0, 4);
 
-    game.load.tilemap('scene', 'assets/shinygaem_map..json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('scene', 'assets/shinygaem_map.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/open_tileset.png');
 
 }
@@ -30,25 +30,31 @@ var lastPosition = 7;
 
 var map;
 var layers = new Array(5);
+var collisionLayer;
 
 
 function create() {
+    //Agregando Fisicas (para manejo de colisiones)
+    game.physics.startSystem(Phaser.Physics.P2JS);
+    game.stage.backgroundColor = '#787878';
+
     //FUNCIONES TILESET
     map = game.add.tilemap('scene');
     map.addTilesetImage('open_tileset', 'tiles');
 
+    //collisionLayer= map.createLayer('Collisions');
     layers[0] = map.createLayer('Background');
     layers[1] = map.createLayer('MiddleGround');
     layers[2] = map.createLayer('Foreground');
-    layers[4] = map.createLayer('Collision');
-    //Agregando Fisicas Arcade (colisiones y cosas)
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+
 
     //Agregando el sprite del jugador
     player = game.add.sprite(32, game.world.height - 150, 'player');
 
+    var collisionLayer = game.physics.p2.convertCollisionObjects(map, "Collider");
+
     //Agregando fisicas del jugador
-    game.physics.arcade.enable(player);
+    game.physics.p2.enable(player);
 
     //Animaciones jugador
     player.animations.add('top', [0, 1, 2], 8, true);
@@ -60,7 +66,6 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
 
-    game.stage.backgroundColor = '#787878';
     
     //Elementos que se renderean sobre el personaje
     layers[3] = map.createLayer('Top');
@@ -69,12 +74,11 @@ function create() {
 
 function update() {
     //colisiones entre el jugador y la layer creada en el json
-    game.physics.arcade.collide(player, layers[5]);
+    game.physics.arcade.collide(player, collisionLayer);
 
     //FUNCIONES JUGADOR
-    player.body.velocity.x = 0;
-    player.body.velocity.y = 0;
-
+    player.body.setZeroVelocity();
+    player.body.rotation = 0;
 
     if (cursors.left.isDown)
     {
@@ -117,6 +121,9 @@ function update() {
         player.frame = lastPosition;
     }
 
+}
+function debug(){
+    console.log("colision");
 }
 
 </script>
