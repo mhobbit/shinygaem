@@ -573,7 +573,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"D:\/UTFSM\/2014-2\/Videojuegos\/Assets\/silveira-openpixels-ff6bc77\/open_tileset.png",
+         "image":"open_tileset.png",
          "imageheight":1216,
          "imagewidth":1440,
          "margin":0,

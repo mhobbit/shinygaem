@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="open_tileset" tilewidth="32" tileheight="32">
-  <image source="D:/UTFSM/2014-2/Videojuegos/Assets/silveira-openpixels-ff6bc77/open_tileset.png" width="1440" height="1216"/>
+  <image source="open_tileset.png" width="1440" height="1216"/>
  </tileset>
  <layer name="Background" width="30" height="20">
   <data encoding="csv">
