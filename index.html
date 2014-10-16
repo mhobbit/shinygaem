@@ -70,6 +70,8 @@ function create() {
     //Agregando fisicas del jugador
     game.physics.arcade.enable(player);
 
+    player.body.setSize(17, 24, 8, 13);
+
     //Animaciones jugador
     player.animations.add('top', [0, 1, 2], 8, true);
     player.animations.add('right', [3, 4, 5], 8, true);
@@ -89,8 +91,9 @@ function create() {
     //papers
     papers = game.add.group();
     papers.enableBody = true;
-
-    papers.create(400, 400, 'paper');
+    for (var i = 0; i < 10; i++){
+        papers.create(game.rnd.integerInRange(0, 960), game.rnd.integerInRange(0, 640), 'paper');
+    }
 }
 
 function update() {
@@ -100,10 +103,10 @@ function update() {
     
     playerMovement();
 
-
     var tiempo = Math.round(game.time.events.duration/1000);
     timeText.setText(tiempo);
     scoreText.setText(score);
+
     if (!alarm.isPlaying && tiempo < 10){
         alarm.play();
     }
@@ -119,7 +122,6 @@ function collectPaper(player, paper) {
 }
 
 function timeUp(){
-    game.add.bitmapText(400, 400, 'Gaem Over','0', 50);
     game.paused = true;
 }
 
